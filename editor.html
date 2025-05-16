@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EditorText - Editor</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f7f5fc;
+    }
+    /* Navbar, tonos como la de homeee*/
+    .navbar {
+      background: #2c3e50;
+    }
+    /* Color principal */
+    .bg-primary {
+      background-color: #3498db !important;
+    }
+    /* Card del editor */
+    .card-editor {
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+    }
+    /* Toolbar */
+    #toolbar .btn {
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      border-radius: 6px;
+    }
+
+  /* Área editable */
+    #editor {
+      min-height: 50vh;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 1rem;
+      background: #fff;
+      outline: none;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navbar idéntica a home -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+  <div class="container">
+    <a class="navbar-brand fw-semibold" href="#">EditorText</a>
+    <div class="ms-auto">
+      <a href="notes.html" class="btn btn-outline-light btn-sm me-2">
+        <i class="fas fa-sticky-note"></i> Notas
+      </a>
+
+    </div>
+  </div>
+</nav>
+
+
+<div class="container my-5">
+  <!-- Tarjeta del editor -->
+  <div class="card card-editor">
+    <div class="card-header bg-primary text-white d-flex align-items-center">
+      <i class="fas fa-edit me-2"></i>
+      <h5 class="mb-0">Editor de Texto</h5>
+    </div>
+    <div class="card-body">
+      <!-- Toolbar -->
+      <div id="toolbar" class="mb-3">
+        <button class="btn btn-light me-1" data-cmd="bold"><i class="fas fa-bold"></i></button>
+        <button class="btn btn-light me-1" data-cmd="italic"><i class="fas fa-italic"></i></button>
+        <button class="btn btn-light me-1" data-cmd="underline"><i class="fas fa-underline"></i></button>
+
+        </button>
+
+      </div>
+      <!-- Área editable -->
+      <div id="editor" contenteditable>
+      </div>
+    </div>
+  </div>
+
+ <!-- Botones inferiores -->
+    <button id="btnSave" class="btn btn-success">
+      <i class="fas fa-check me-1"></i> Listo
+    </button>
+  </div>
+</div>
+
+<!-- JS de Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Comandos del editor -->
+<script>
+  document.querySelectorAll('#toolbar .btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const cmd = btn.getAttribute('data-cmd');
+      const value = btn.getAttribute('data-value');
+      document.execCommand(cmd, false, value || null);
+    });
+  });
+
+</script>
+<script src="editor.js"></script>
+</body>
+</html>
