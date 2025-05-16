@@ -50,6 +50,63 @@ function verificarToken(req, res, next) {
     }
 }
 
+// Registro de usuario
+app.post('/register', (req, res) => {
+    const { nombre, correo, contrasena } = req.body; // Datos del usuario
+
+    User.create({ nombre, correo, contrasena })
+        .then(user => res.status(201).json({ message: 'Usuario registrado.', token: generarToken(user._id) }))
+        .catch(err => {
+            if (err.code === 11000) {
+                res.status(400).json({ message: 'El correo ya está registrado.' });
+            } else {
+                console.error(err); // Muestra el error en consola para debug
+                res.status(500).json({ message: 'Error al registrar.' });
+            }
+        });
+});
+
+// Inicio de sesión
+app.post('/login', (req, res) => {
+    const { correo, contrasena } = req.body; // Datos para iniciar sesión
+
+    User.findOne({ correo, contrasena })
+        .then(user => {
+            if (user) {
+                res.json({ message: 'Inicio de sesión exitoso.', token: generarToken(user._id) });
+            } else {
+                res.status(401).json({ message: 'Credenciales incorrectas.' });
+            }
+        })
+        .catch(() => res.status(500).json({ message: 'Error al iniciar sesión.' }));
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
