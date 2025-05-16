@@ -31,7 +31,24 @@ const noteSchema = new mongoose.Schema({
 });
 const Note = mongoose.model('Note', noteSchema);
 
+// Función para generar un token JWT
+function generarToken(id) {
+    return jwt.sign({ userId: id }, 'secreto_jwt', { expiresIn: '1h' }); // Token que dura 1 hora
+}
 
+// Middleware para verificar el token JWT
+function verificarToken(req, res, next) {
+    const token = req.headers['authorization']; // Obtenemos el token
+    if (token) {
+        jwt.verify(token, 'secreto_jwt', (err, decoded) => {
+            if (err) return res.status(403).json({ message: 'Token inválido.' });
+            req.userId = decoded.userId; // Guardamos el ID del usuario
+            next();
+        });
+    } else {
+        res.status(401).json({ message: 'No autenticado.' }); // Si no hay token
+    }
+}
 
 
 
