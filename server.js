@@ -1,3 +1,4 @@
+
 // Importando módulos necesarios
 const express = require('express'); // Manejar el servidor
 const mongoose = require('mongoose'); // Conectar con la base de datos MongoDB
@@ -7,6 +8,7 @@ const app = express(); // Crear la aplicación
 
 app.use(cors()); // Permitir peticiones desde cualquier origen
 app.use(express.json()); // Permitir manejo de JSON
+
 // Conectar a la base de datos de MongoDB
 mongoose.connect('mongodb+srv://Atlasadmin:Hola12345@editortextcluster.kc0gvhk.mongodb.net/EditorText', {
     useNewUrlParser: true,
@@ -81,9 +83,6 @@ app.post('/login', (req, res) => {
         .catch(() => res.status(500).json({ message: 'Error al iniciar sesión.' }));
 });
 
-
-
-
 // Rutas de Usuarios
 // Obtener todos los usuarios (solo admin)
 app.get('/users', verificarToken, (req, res) => {
@@ -144,63 +143,6 @@ app.delete('/note/:id', verificarToken, (req, res) => {
         .then(note => note ? res.json({ message: 'Nota eliminada.' }) : res.status(404).json({ message: 'Nota no encontrada.' }))
         .catch(() => res.status(500).json({ message: 'Error al eliminar nota.' }));
 });
-
-// Iniciar el servidor
-app.listen(3000, () => console.log('Servidor corriendo en http://localhost:3000'));
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // Iniciar el servidor
 app.listen(3000, () => console.log('Servidor corriendo en http://localhost:3000'));
