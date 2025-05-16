@@ -84,6 +84,70 @@ app.post('/login', (req, res) => {
 
 
 
+// Rutas de Usuarios
+// Obtener todos los usuarios (solo admin)
+app.get('/users', verificarToken, (req, res) => {
+    User.find()
+        .then(users => res.json(users))
+        .catch(() => res.status(500).json({ message: 'Error al cargar usuarios.' }));
+});
+
+// Eliminar usuario y sus notas (solo admin)
+app.delete('/user/:id', verificarToken, (req, res) => {
+    User.findByIdAndDelete(req.params.id)
+        .then(user => {
+            if (user) {
+                Note.deleteMany({ usuarioId: req.params.id }).then(() => {
+                    res.json({ message: 'Usuario y sus notas eliminados.' });
+                });
+            } else {
+                res.status(404).json({ message: 'Usuario no encontrado.' });
+            }
+        })
+        .catch(() => res.status(500).json({ message: 'Error al eliminar usuario.' }));
+});
+
+// Rutas de Notas
+// Crear nota
+app.post('/note', verificarToken, (req, res) => {
+    const { contenido } = req.body;
+    Note.create({ usuarioId: req.userId, contenido })
+        .then(note => res.status(201).json(note))
+        .catch(() => res.status(500).json({ message: 'Error al crear nota.' }));
+});
+
+// Obtener todas las notas
+app.get('/notes', verificarToken, (req, res) => {
+    Note.find({ usuarioId: req.userId })
+        .then(notes => res.json(notes))
+        .catch(() => res.status(500).json({ message: 'Error al cargar notas.' }));
+});
+
+// Obtener una nota específica
+app.get('/note/:id', verificarToken, (req, res) => {
+    Note.findById(req.params.id)
+        .then(note => note ? res.json(note) : res.status(404).json({ message: 'Nota no encontrada.' }))
+        .catch(() => res.status(500).json({ message: 'Error al cargar nota.' }));
+});
+
+// Actualizar nota
+app.put('/note/:id', verificarToken, (req, res) => {
+    const { contenido } = req.body;
+    Note.findByIdAndUpdate(req.params.id, { contenido }, { new: true })
+        .then(note => note ? res.json({ message: 'Nota actualizada.', note }) : res.status(404).json({ message: 'Nota no encontrada.' }))
+        .catch(() => res.status(500).json({ message: 'Error al actualizar nota.' }));
+});
+
+// Eliminar nota
+app.delete('/note/:id', verificarToken, (req, res) => {
+    Note.findByIdAndDelete(req.params.id)
+        .then(note => note ? res.json({ message: 'Nota eliminada.' }) : res.status(404).json({ message: 'Nota no encontrada.' }))
+        .catch(() => res.status(500).json({ message: 'Error al eliminar nota.' }));
+});
+
+// Iniciar el servidor
+app.listen(3000, () => console.log('Servidor corriendo en http://localhost:3000'));
+
 
 
 
